@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: jaqyn-api
+    runtime: docker
+    dockerfilePath: ./api/Dockerfile
+    dockerContext: .
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: prod
+      - key: BOT_MODE
+        value: webhook
+      - key: USE_REDIS
+        value: "false"
+      - key: WEBHOOK_SECRET
+        generateValue: true
+      - key: BOT_TOKEN
+        sync: false
+      - key: WEBHOOK_URL
+        sync: false
+      - key: MINI_APP_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_REGION
+        value: auto
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ACCESS_KEY
+        sync: false
+      - key: S3_SECRET_KEY
+        sync: false
+      - key: SIGNED_URL_TTL
+        value: "3600"
+      - key: CORS_ORIGINS
+        sync: false
+      - key: ADMIN_TELEGRAM_IDS
+        sync: false
+      - key: POSTGRES_DB
+        value: unused
+      - key: POSTGRES_USER
+        value: unused
+      - key: POSTGRES_PASSWORD
+        value: unused

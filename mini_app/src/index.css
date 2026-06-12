@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  background: #f5eee2;
+  color: #241a17;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* запрет «резинового» оверскролла внутри Telegram */
+  overscroll-behavior: none;
+}
+
+/* Безопасные зоны (вырез/нижняя полоса) */
+.safe-t {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-b {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Высота вьюпорта Telegram, с фолбэком на dvh */
+.app-h {
+  min-height: 100dvh;
+}
