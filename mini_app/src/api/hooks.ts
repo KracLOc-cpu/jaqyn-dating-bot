@@ -5,7 +5,7 @@
  */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { api, USE_MOCKS } from "../lib/api";
+import { api, ApiError, USE_MOCKS } from "../lib/api";
 import { MOCK_FEED, MOCK_MATCHES, MOCK_ME, MOCK_PHOTOS } from "../lib/mock";
 import type { FeedParams, ProfileUpdate, SwipeResult } from "../lib/types";
 
@@ -23,6 +23,10 @@ export function useMe() {
   return useQuery({
     queryKey: ["me"],
     queryFn: () => (USE_MOCKS ? delay(MOCK_ME) : api.me()),
+    // 404 = профиля ещё нет (новый пользователь) — это не ошибка сети, не ретраим,
+    // чтобы вход и гейт «/» отрабатывали сразу.
+    retry: (count, err) =>
+      !(err instanceof ApiError && err.status === 404) && count < 1,
   });
 }
 

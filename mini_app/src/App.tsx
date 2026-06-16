@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { Button } from "./components/Button";
 import { Splash } from "./components/Splash";
 import { ToastHost } from "./components/ui/Toast";
+import Entry from "./pages/Entry";
 import Welcome from "./pages/Welcome";
 import Dev from "./pages/Dev";
 import Username from "./pages/Username";
@@ -44,7 +45,8 @@ function Placeholder() {
 function AnimatedRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Welcome />} />
+      <Route path="/" element={<Entry />} />
+        <Route path="/welcome" element={<Welcome />} />
         <Route path="/dev" element={<Dev />} />
         <Route path="/username" element={<Username />} />
 
