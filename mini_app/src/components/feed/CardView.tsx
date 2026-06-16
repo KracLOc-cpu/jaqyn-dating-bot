@@ -60,9 +60,9 @@ export function CardView({ profile, rounded = true }: { profile: ProfileCard; ro
         {profile.bio && <p className="mt-3 line-clamp-2 text-[14px] text-white/90">{profile.bio}</p>}
 
         {reasons.length > 0 && (
-          <div className="mt-3 rounded-2xl bg-white/12 px-3 py-2 backdrop-blur">
-            <p className="text-[12px] font-semibold text-white/70">Совпадает с тобой</p>
-            <p className="mt-0.5 text-[13px] text-white">{reasons.join(" · ")}</p>
+          <div className="mt-3 rounded-2xl bg-[#D4946A]/25 px-3 py-2 ring-1 ring-[#D4946A]/30 backdrop-blur">
+            <p className="text-[11.5px] font-semibold text-[#FFD9A8]">✨ Совпадает с тобой</p>
+            <p className="mt-0.5 text-[13px] font-medium text-white">{reasons.join(" · ")}</p>
           </div>
         )}
       </div>

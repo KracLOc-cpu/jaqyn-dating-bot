@@ -27,8 +27,17 @@ export function Splash() {
             initial={{ opacity: 0, scale: 0.88 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: "spring", stiffness: 220, damping: 22 }}
+            className="flex flex-col items-center gap-2"
           >
             <Logo />
+            <motion.p
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25, duration: 0.4 }}
+              className="text-[14px] text-muted"
+            >
+              знакомства среди своих
+            </motion.p>
           </motion.div>
         </motion.div>
       )}

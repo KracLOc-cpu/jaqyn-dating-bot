@@ -4,20 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../components/Button";
 import { HeroAlmaty } from "../components/HeroAlmaty";
 import { Logo } from "../components/Logo";
-import { ShieldHeartIcon, TelegramIcon } from "../components/icons";
+import { ShieldHeartIcon } from "../components/icons";
 import { haptic } from "../lib/telegram";
 
 const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.09, delayChildren: 0.05 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
   },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
 export default function Welcome() {
@@ -36,20 +36,23 @@ export default function Welcome() {
       </motion.div>
 
       {/* Заголовок */}
-      <motion.h1
-        variants={item}
-        className="mt-8 text-center text-[clamp(28px,7vw,34px)] font-bold leading-[1.18] text-ink"
-      >
-        Найди человека, с которым совпадают не только фото
-      </motion.h1>
+      <motion.div variants={item} className="mt-7 text-center">
+        <p className="text-[15px] font-medium text-burgundy/80 tracking-wide uppercase mb-2">
+          Знакомства среди своих
+        </p>
+        <h1 className="text-[clamp(26px,6.5vw,32px)] font-bold leading-[1.22] text-ink">
+          Здесь находят людей,{" "}
+          <span className="text-burgundy">близких по духу</span>
+        </h1>
+      </motion.div>
 
       {/* Описание */}
       <motion.p
         variants={item}
-        className="mx-auto mt-4 max-w-[22rem] text-center text-[17px] leading-[1.42] text-ink/80"
+        className="mx-auto mt-3 max-w-[22rem] text-center text-[16px] leading-[1.5] text-muted"
       >
-        Культура, язык, город и намерения — всё это важно. Мы показываем людей,
-        которые тебе подходят.
+        Общий язык, культура и намерения — не мелочи.
+        Jaqyn показывает тех, с кем ты правда совпадаешь.
       </motion.p>
 
       {/* Hero Алматы */}
@@ -57,41 +60,38 @@ export default function Welcome() {
         <HeroAlmaty />
       </motion.div>
 
-      {/* Карточка безопасности (перекрывает низ hero) */}
+      {/* Карточка-обещание */}
       <motion.div
         variants={item}
-        className="relative z-10 -mt-14 mx-5 flex items-center gap-4 rounded-[1.45rem] bg-cream-card/95 px-5 py-4 text-ink shadow-card ring-1 ring-white/80 backdrop-blur"
+        className="relative z-10 -mt-12 mx-4 flex items-center gap-4 rounded-[1.5rem] bg-cream-card/96 px-5 py-4 text-ink shadow-card ring-1 ring-white/70 backdrop-blur-sm"
       >
-        <ShieldHeartIcon className="h-12 w-12 shrink-0 text-burgundy" />
+        <ShieldHeartIcon className="h-11 w-11 shrink-0 text-burgundy" />
         <div>
-          <p className="text-[18px] font-semibold leading-[1.28]">
-            Контакт открывается только после взаимной симпатии
+          <p className="text-[16px] font-semibold leading-[1.3]">
+            Только взаимная симпатия открывает контакт
           </p>
-          <p className="mt-2 text-[15px] leading-snug text-muted">
-            Без случайных сообщений и спама
+          <p className="mt-1 text-[13.5px] leading-snug text-muted">
+            Никакого спама и случайных сообщений
           </p>
         </div>
       </motion.div>
 
-      {/* Низ: кнопка + подпись */}
       <div className="flex-1" />
 
-      <motion.div variants={item} className="pb-2">
+      {/* Кнопка */}
+      <motion.div variants={item} className="pb-4">
         <Button
           onClick={() => {
             haptic.medium();
             navigate("/username");
           }}
         >
-          Начать знакомство
+          Найти своих ✨
         </Button>
 
-        <div className="mt-5 flex items-center justify-center gap-2 text-[15px] text-ink/75">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#229ED9] text-white">
-            <TelegramIcon className="h-4 w-4" />
-          </span>
-          Работает внутри Telegram
-        </div>
+        <p className="mt-4 text-center text-[13.5px] text-muted">
+          Бесплатно · Только в Telegram
+        </p>
       </motion.div>
     </motion.div>
   );

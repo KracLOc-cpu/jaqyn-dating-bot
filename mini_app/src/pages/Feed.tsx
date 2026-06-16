@@ -106,23 +106,56 @@ export default function Feed() {
 }
 
 function ActionButton({ kind, onClick }: { kind: "pass" | "info" | "like"; onClick: () => void }) {
-  const styles = {
-    pass: "h-16 w-16 bg-white text-rose-500 ring-1 ring-line",
-    info: "h-12 w-12 bg-white text-burgundy ring-1 ring-line",
-    like: "h-16 w-16 bg-burgundy text-white",
+  const config = {
+    pass: {
+      size: "h-[60px] w-[60px]",
+      bg: "bg-white ring-1 ring-line text-rose-400",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      ),
+      label: "Пропустить",
+      labelColor: "text-muted",
+    },
+    info: {
+      size: "h-[46px] w-[46px]",
+      bg: "bg-white ring-1 ring-line text-burgundy/70",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><circle cx="12" cy="8" r="0.5" fill="currentColor" />
+        </svg>
+      ),
+      label: "Подробнее",
+      labelColor: "text-muted/70",
+    },
+    like: {
+      size: "h-[60px] w-[60px]",
+      bg: "bg-burgundy text-white",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor" stroke="currentColor" strokeWidth="0">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+        </svg>
+      ),
+      label: "Нравится",
+      labelColor: "text-burgundy",
+    },
   }[kind];
-  const icon = { pass: "✕", info: "ℹ", like: "❤" }[kind];
+
   return (
-    <motion.button
-      type="button"
-      whileTap={{ scale: 0.88 }}
-      onClick={() => {
-        haptic.light();
-        onClick();
-      }}
-      className={`flex items-center justify-center rounded-full text-2xl shadow-card ${styles}`}
-    >
-      {icon}
-    </motion.button>
+    <div className="flex flex-col items-center gap-1.5">
+      <motion.button
+        type="button"
+        whileTap={{ scale: 0.86 }}
+        onClick={() => {
+          haptic.light();
+          onClick();
+        }}
+        className={`flex items-center justify-center rounded-full shadow-card ${config.size} ${config.bg}`}
+      >
+        {config.icon}
+      </motion.button>
+      <span className={`text-[11px] font-medium ${config.labelColor}`}>{config.label}</span>
+    </div>
   );
 }
