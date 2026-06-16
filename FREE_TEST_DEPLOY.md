@@ -61,6 +61,14 @@ DATABASE_URL=postgresql://...
 
 The app converts `postgresql://` to `postgresql+asyncpg://` automatically.
 
+Local check after adding `DATABASE_URL` to `.env`:
+
+```bash
+python scripts/check_db.py
+alembic upgrade head
+python scripts/check_db.py
+```
+
 ## 2. Cloudflare R2
 
 1. Create an R2 bucket, for example `jaqyn-photos-test`.
