@@ -12,6 +12,18 @@ Telegram bot
   -> Cloudflare R2 photos
 ```
 
+GitHub repository:
+
+```text
+https://github.com/KracLOc-cpu/jaqyn-dating-bot
+```
+
+Supabase project ref:
+
+```text
+tinfgusdxchnuthfuiwh
+```
+
 ## What is free here
 
 - Vercel Hobby: Mini App frontend.
@@ -29,10 +41,19 @@ small private test, but before public launch revoke it in BotFather and use a ne
 ## 1. Supabase
 
 1. Create a Supabase project.
-2. Open Project Settings -> Database.
-3. Copy the Postgres connection string.
-4. Use the pooled/transaction connection if Supabase recommends it.
-5. This becomes Render env:
+2. Open Project Settings -> Database -> Connection string.
+3. Copy the **Session pooler** string, not transaction mode.
+   It should use port `5432` and look similar to:
+
+```text
+postgresql://postgres.tinfgusdxchnuthfuiwh:<DB_PASSWORD>@aws-0-<region>.pooler.supabase.com:5432/postgres
+```
+
+Use Session pooler for this Render web service. Supabase transaction mode uses
+port `6543`; it is good for many serverless workloads, but it can conflict with
+drivers that use prepared statements.
+
+4. This becomes Render env:
 
 ```env
 DATABASE_URL=postgresql://...
@@ -72,7 +93,12 @@ Without R2 CORS, photo upload from the phone browser will fail even if API works
 ## 3. Render backend
 
 1. Push this project to GitHub.
-2. In Render, create a new Blueprint from the repository.
+2. In Render, create a new Blueprint from:
+
+```text
+https://github.com/KracLOc-cpu/jaqyn-dating-bot
+```
+
 3. Render will read `render.yaml`.
 4. Set env variables:
 
