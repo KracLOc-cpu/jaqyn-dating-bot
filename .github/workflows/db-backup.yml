@@ -1,0 +1,52 @@
+name: DB backup (encrypted)
+
+# Шифрованный бэкап Supabase Postgres по расписанию.
+# Делает pg_dump → шифрует gpg (AES256, симметрично) → кладёт в артефакты репо.
+#
+# Нужные секреты репозитория (Settings → Secrets and variables → Actions):
+#   DATABASE_URL            — строка подключения к Supabase (session pooler, как в Render)
+#   BACKUP_GPG_PASSPHRASE   — длинная парольная фраза для шифрования дампа
+#
+# Восстановление:
+#   gpg --batch --passphrase "<BACKUP_GPG_PASSPHRASE>" -d jaqyn-YYYYMMDD-HHMM.dump.gpg > backup.dump
+#   pg_restore --no-owner --no-acl -d "<DATABASE_URL>" backup.dump
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # каждый день в 02:00 UTC (~07:00 Алматы)
+  workflow_dispatch: {}    # ручной запуск кнопкой
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PostgreSQL 17 client
+        run: |
+          set -euo pipefail
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+            | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/pgdg.gpg
+          echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17
+
+      - name: Dump and encrypt
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          BACKUP_GPG_PASSPHRASE: ${{ secrets.BACKUP_GPG_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          STAMP="$(date -u +%Y%m%d-%H%M)"
+          FILE="jaqyn-${STAMP}.dump"
+          pg_dump "$DATABASE_URL" --no-owner --no-acl -Fc -f "$FILE"
+          gpg --batch --yes --passphrase "$BACKUP_GPG_PASSPHRASE" \
+            --symmetric --cipher-algo AES256 -o "${FILE}.gpg" "$FILE"
+          rm -f "$FILE"
+          echo "FILE=${FILE}.gpg" >> "$GITHUB_ENV"
+
+      - name: Upload encrypted backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILE }}
+          path: ${{ env.FILE }}
+          retention-days: 30
