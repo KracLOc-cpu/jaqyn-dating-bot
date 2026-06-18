@@ -1,4 +1,12 @@
 .env
+
+# Локальные секреты — НИКОГДА не коммитить (репозиторий ПУБЛИЧНЫЙ!)
+CREDENTIALS.local.md
+*.local.md
+.env.local
+.env.*.local
+secrets/
+
 __pycache__/
 *.pyc
 *.pyo
