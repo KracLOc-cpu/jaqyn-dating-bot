@@ -51,6 +51,11 @@ class Settings(BaseSettings):
     s3_secret_key: str
     signed_url_ttl: int = Field(default=3600)
 
+    # ── Moderation ──
+    # Пилот/тест: фото сразу approved, чтобы лента наполнялась без ручной модерации.
+    # Перед публичным запуском поставить False и включить нормальную проверку.
+    auto_approve_photos: bool = Field(default=False)
+
     # ── Derived ──
     @computed_field  # type: ignore[prop-decorator]
     @property

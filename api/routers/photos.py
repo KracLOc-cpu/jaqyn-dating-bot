@@ -13,7 +13,7 @@ from sqlalchemy import func, select
 from api.deps import CurrentUser, DbDep
 from api.media import ttl
 from api.schemas import OkResponse, PhotoConfirmIn, PhotoOut, PresignIn, PresignOut
-from db.models import Photo
+from db.models import Photo, PhotoModeration
 from shared import s3
 from shared.config import settings
 
@@ -67,7 +67,18 @@ async def confirm(db: DbDep, user: CurrentUser, body: PhotoConfirmIn):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "upload not found in storage")
 
     order = await _count(db, user.telegram_id)
-    photo = Photo(user_id=user.telegram_id, storage_key=body.storage_key, display_order=order)
+    # В пилоте (AUTO_APPROVE_PHOTOS=true) фото сразу попадает в ленту; иначе ждёт модерации.
+    status_value = (
+        PhotoModeration.approved.value
+        if settings.auto_approve_photos
+        else PhotoModeration.pending.value
+    )
+    photo = Photo(
+        user_id=user.telegram_id,
+        storage_key=body.storage_key,
+        display_order=order,
+        moderation_status=status_value,
+    )
     db.add(photo)
     await db.flush()
     return PhotoOut(
